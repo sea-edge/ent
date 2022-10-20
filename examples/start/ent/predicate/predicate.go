@@ -10,11 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Car is the predicate function for car builders.
-type Car func(*sql.Selector)
+// Hoge is the predicate function for hoge builders.
+type Hoge func(*sql.Selector)
 
-// Group is the predicate function for group builders.
-type Group func(*sql.Selector)
-
-// User is the predicate function for user builders.
-type User func(*sql.Selector)
+// HogeAdministrator is the predicate function for hogeadministrator builders.
+type HogeAdministrator func(*sql.Selector)

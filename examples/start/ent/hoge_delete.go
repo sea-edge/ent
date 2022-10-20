@@ -12,50 +12,50 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/examples/start/ent/group"
+	"entgo.io/ent/examples/start/ent/hoge"
 	"entgo.io/ent/examples/start/ent/predicate"
 	"entgo.io/ent/schema/field"
 )
 
-// GroupDelete is the builder for deleting a Group entity.
-type GroupDelete struct {
+// HogeDelete is the builder for deleting a Hoge entity.
+type HogeDelete struct {
 	config
 	hooks    []Hook
-	mutation *GroupMutation
+	mutation *HogeMutation
 }
 
-// Where appends a list predicates to the GroupDelete builder.
-func (gd *GroupDelete) Where(ps ...predicate.Group) *GroupDelete {
-	gd.mutation.Where(ps...)
-	return gd
+// Where appends a list predicates to the HogeDelete builder.
+func (hd *HogeDelete) Where(ps ...predicate.Hoge) *HogeDelete {
+	hd.mutation.Where(ps...)
+	return hd
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (gd *GroupDelete) Exec(ctx context.Context) (int, error) {
+func (hd *HogeDelete) Exec(ctx context.Context) (int, error) {
 	var (
 		err      error
 		affected int
 	)
-	if len(gd.hooks) == 0 {
-		affected, err = gd.sqlExec(ctx)
+	if len(hd.hooks) == 0 {
+		affected, err = hd.sqlExec(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*GroupMutation)
+			mutation, ok := m.(*HogeMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
-			gd.mutation = mutation
-			affected, err = gd.sqlExec(ctx)
+			hd.mutation = mutation
+			affected, err = hd.sqlExec(ctx)
 			mutation.done = true
 			return affected, err
 		})
-		for i := len(gd.hooks) - 1; i >= 0; i-- {
-			if gd.hooks[i] == nil {
+		for i := len(hd.hooks) - 1; i >= 0; i-- {
+			if hd.hooks[i] == nil {
 				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
 			}
-			mut = gd.hooks[i](mut)
+			mut = hd.hooks[i](mut)
 		}
-		if _, err := mut.Mutate(ctx, gd.mutation); err != nil {
+		if _, err := mut.Mutate(ctx, hd.mutation); err != nil {
 			return 0, err
 		}
 	}
@@ -63,57 +63,57 @@ func (gd *GroupDelete) Exec(ctx context.Context) (int, error) {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gd *GroupDelete) ExecX(ctx context.Context) int {
-	n, err := gd.Exec(ctx)
+func (hd *HogeDelete) ExecX(ctx context.Context) int {
+	n, err := hd.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (gd *GroupDelete) sqlExec(ctx context.Context) (int, error) {
+func (hd *HogeDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := &sqlgraph.DeleteSpec{
 		Node: &sqlgraph.NodeSpec{
-			Table: group.Table,
+			Table: hoge.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: group.FieldID,
+				Type:   field.TypeString,
+				Column: hoge.FieldID,
 			},
 		},
 	}
-	if ps := gd.mutation.predicates; len(ps) > 0 {
+	if ps := hd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, gd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, hd.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
 	return affected, err
 }
 
-// GroupDeleteOne is the builder for deleting a single Group entity.
-type GroupDeleteOne struct {
-	gd *GroupDelete
+// HogeDeleteOne is the builder for deleting a single Hoge entity.
+type HogeDeleteOne struct {
+	hd *HogeDelete
 }
 
 // Exec executes the deletion query.
-func (gdo *GroupDeleteOne) Exec(ctx context.Context) error {
-	n, err := gdo.gd.Exec(ctx)
+func (hdo *HogeDeleteOne) Exec(ctx context.Context) error {
+	n, err := hdo.hd.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
 	case n == 0:
-		return &NotFoundError{group.Label}
+		return &NotFoundError{hoge.Label}
 	default:
 		return nil
 	}
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gdo *GroupDeleteOne) ExecX(ctx context.Context) {
-	gdo.gd.ExecX(ctx)
+func (hdo *HogeDeleteOne) ExecX(ctx context.Context) {
+	hdo.hd.ExecX(ctx)
 }
